@@ -1,0 +1,61 @@
+npm init -y
+npm i express
+node --watch index
+
+Instalação biblioteca:
+npm i sequelize
+
+
+Escolher qual banco vai ser usado:
+
+npm install pg pg-hstore # Postgres
+npm install mysql2
+npm install mariadb
+npm install sqlite3
+npm install tedious # Microsoft SQL Server
+npm install oracledb # Oracle Database
+
+Conectando ao banco:
+
+import { Sequelize } from "sequelize";
+
+// Option 3: Passing parameters separately (other dialects)
+const sequelize = new Sequelize('database', 'username', 'password', {
+  host: 'localhost',
+  dialect: /* one of 'mysql' | 'postgres' | 'sqlite' | 'mariadb' | 'mssql' | 'db2' | 'snowflake' | 'oracle' */
+});
+
+Teste de conexão:
+
+try {
+  await sequelize.authenticate();
+  console.log('Connection has been established successfully.');
+} catch (error) {
+  console.error('Unable to connect to the database:', error);
+}
+
+
+
+
+Modelo de definição:
+
+const User = sequelize.define(
+  'User',
+  {
+    // Model attributes are defined here
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      // allowNull defaults to true
+    },
+  },
+  {
+    // Other model options go here
+  },
+);
+
+// `sequelize.define` also returns the model
+console.log(User === sequelize.models.User); // true

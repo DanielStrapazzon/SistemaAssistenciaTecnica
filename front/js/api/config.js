@@ -1,0 +1,1 @@
+const API_BASE = "http://localhost:4002"; // ajuste para seu backend
