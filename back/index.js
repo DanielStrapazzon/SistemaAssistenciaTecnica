@@ -31,6 +31,8 @@ api.delete('/usuario/:id', UsuarioController.excluir);
 api.post('/usuario', UsuarioController.inserir);
 api.put('/usuario/:id', UsuarioController.alterar);
 
+api.get("/chamado/relatorio", ChamadoController.relatorio);
+
 api.get('/chamado', ChamadoController.listar);
 api.get('/chamado/:id', ChamadoController.selecionar);
 api.delete('/chamado/:id', ChamadoController.excluir);
