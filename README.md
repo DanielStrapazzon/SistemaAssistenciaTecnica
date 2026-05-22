@@ -17,3 +17,11 @@ Cada chamado deve estar vinculado a um tipo de serviço.
 
 #A regra de negócio consiste em calcular o tempo total de atendimento com base nas datas registradas e calcular o
 valor final conforme o tipo de serviço escolhido.
+
+
+O projeto usa:
+- Backend: Node.js com o framework Express
+- Frontend: HTML, CSS e JavaScript puro, sem React/Vue/Angular
+- Estilização: Bootstrap
+- Banco de dados: PostgreSQL
+- ORM para acesso ao banco: Sequelize
