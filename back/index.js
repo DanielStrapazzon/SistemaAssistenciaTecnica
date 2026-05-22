@@ -7,6 +7,12 @@ import TipoServicoController from "./controllers/TipoServicoController.js";
 
 import cors from "cors";
 
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
+});
+
 //Testando a conexão com o banco de dados
 try {
   await banco.authenticate();
