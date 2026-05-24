@@ -1,15 +1,10 @@
 import { Sequelize } from "sequelize";
 
-const banco = new Sequelize(process.env.DATABASE_URL, {
-  dialect: "postgres",
-  protocol: "postgres",
-  logging: false,
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false
-    }
-  },
+//Configuração do banco de dados
+const banco = new Sequelize('banco1', 'postgres', '2712', {
+  host: 'localhost',
+  port: 5432,
+  dialect: 'postgres',
   define: {
     timestamps: false,
     freezeTableName: true

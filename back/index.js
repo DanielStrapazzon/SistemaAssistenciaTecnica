@@ -7,12 +7,7 @@ import TipoServicoController from "./controllers/TipoServicoController.js";
 
 import cors from "cors";
 
-const api = Express();
-
-api.use(cors());
-api.use(Express.json());
-
-// Testando conexão
+//Testando a conexão com o banco de dados
 try {
   await banco.authenticate();
   console.log('Banco de dados conectado com sucesso!');
@@ -20,9 +15,15 @@ try {
   console.error('Erro ao conectar ao banco de dados:', error);
 }
 
+//Métodos da API
+
+const api = Express();
+api.use(cors());
+api.use(Express.json());
+
 api.get('/teste', (req, res) => {
     res.send('API funcionando');
-});
+}); 
 
 api.get('/usuario', UsuarioController.listar);
 api.get('/usuario/:id', UsuarioController.selecionar);
@@ -44,8 +45,10 @@ api.delete('/tipo-servico/:id', TipoServicoController.excluir);
 api.post('/tipo-servico', TipoServicoController.inserir);
 api.put('/tipo-servico/:id', TipoServicoController.alterar);
 
-const PORT = process.env.PORT || 3000;
+api.listen(4002, () => { console.log('API Rodando...') });
 
-api.listen(PORT, () => {
-  console.log(`API Rodando na porta ${PORT}`);
-});
+
+
+
+
+
