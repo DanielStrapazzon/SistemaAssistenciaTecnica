@@ -3,77 +3,126 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Sistema de Assistência Técnica</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-store">
+  <title>Sistema de Assistencia Tecnica</title>
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="front/css/style.css?v=6" rel="stylesheet">
+  <script src="front/js/components/header.js?v=6" defer></script>
+  <script src="front/js/components/feedback.js?v=6" defer></script>
 </head>
 
-<body class="bg-light">
+<body>
+  <main class="app-shell">
+    <div class="container">
+      <div id="app-header"></div>
 
-  <div class="container mt-4">
+      <section class="page-heading">
+        <span class="eyebrow">Painel operacional</span>
+        <h1 class="page-title">Painel do Sistema</h1>
+        <p class="page-description">
+          Acesse os cadastros principais e acompanhe o fluxo de atendimentos da assistencia tecnica.
+        </p>
+      </section>
 
-    <h3>Painel do Sistema</h3>
-
-    <div class="row mt-3">
-
-      <!-- CARD: TIPOS DE SERVIÇO -->
-      <div class="col-md-4">
-        <div class="card shadow-sm">
-          <div class="card-body text-center">
-
-            <span class="badge bg-primary mb-2">Configuração</span>
-
-            <h5>Tipos de Serviço</h5>
-            <p>Cadastro de serviços (hora ou valor fixo)</p>
-
-            <a href="tiposervico.html" class="btn btn-outline-primary w-100">
-              Gerenciar
-            </a>
-
+      <section class="row g-3 mb-4">
+        <div class="col-md-4">
+          <div class="stat-card">
+            <div class="d-flex align-items-center gap-3">
+              <span class="stat-icon"><i class="bi bi-sliders2"></i></span>
+              <div>
+                <span class="stat-label">Configuracao</span>
+                <p class="stat-value">Servicos</p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- CARD: CHAMADOS -->
-      <div class="col-md-4">
-        <div class="card shadow-sm">
-          <div class="card-body text-center">
-
-            <span class="badge bg-success mb-2">Operacional</span>
-
-            <h5>Chamados</h5>
-            <p>Registro e controle de atendimentos</p>
-
-            <a href="chamado.html" class="btn btn-outline-success w-100">
-              Novo Chamado
-            </a>
-
+        <div class="col-md-4">
+          <div class="stat-card">
+            <div class="d-flex align-items-center gap-3">
+              <span class="stat-icon"><i class="bi bi-clipboard2-plus"></i></span>
+              <div>
+                <span class="stat-label">Operacao</span>
+                <p class="stat-value">Chamados</p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- CARD: RELATÓRIO -->
-      <div class="col-md-4">
-        <div class="card shadow-sm">
-          <div class="card-body text-center">
-
-            <span class="badge bg-dark mb-2">Relatórios</span>
-
-            <h5>Relatórios</h5>
-            <p>Tempo total e valores dos atendimentos</p>
-
-            <a href="relatorio.html" class="btn btn-outline-dark w-100">
-              Relatórios
-            </a>
-
+        <div class="col-md-4">
+          <div class="stat-card">
+            <div class="d-flex align-items-center gap-3">
+              <span class="stat-icon"><i class="bi bi-cash-coin"></i></span>
+              <div>
+                <span class="stat-label">Relatorios</span>
+                <p class="stat-value">Valores</p>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
+      </section>
 
+      <section class="dashboard-grid">
+        <div class="panel dashboard-panel">
+          <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
+            <div>
+              <h2 class="section-title">Acoes rapidas</h2>
+              <span class="text-muted small">Escolha uma area para continuar.</span>
+            </div>
+            <span class="badge-soft"><i class="bi bi-grid-1x2"></i> Menu</span>
+          </div>
+
+          <div class="quick-actions">
+            <a href="tiposervico.html?v=6" class="quick-action">
+              <span class="action-icon"><i class="bi bi-sliders2"></i></span>
+              <span>
+                <h2>Tipos de Servico</h2>
+                <p>Configure servicos por hora ou por valor fixo.</p>
+              </span>
+              <i class="bi bi-arrow-right quick-action-arrow"></i>
+            </a>
+
+            <a href="chamado.html?v=6" class="quick-action">
+              <span class="action-icon"><i class="bi bi-wrench-adjustable"></i></span>
+              <span>
+                <h2>Novo Chamado</h2>
+                <p>Registre cliente, datas, servico e valor final.</p>
+              </span>
+              <i class="bi bi-arrow-right quick-action-arrow"></i>
+            </a>
+
+            <a href="relatorio.html?v=6" class="quick-action">
+              <span class="action-icon"><i class="bi bi-bar-chart-line"></i></span>
+              <span>
+                <h2>Relatorios</h2>
+                <p>Consulte atendimentos por periodo e total financeiro.</p>
+              </span>
+              <i class="bi bi-arrow-right quick-action-arrow"></i>
+            </a>
+          </div>
+        </div>
+
+        <aside class="panel dashboard-panel">
+          <div class="d-flex align-items-center justify-content-between gap-3 mb-3">
+            <div>
+              <h2 class="section-title">Fluxo de trabalho</h2>
+              <span class="text-muted small">Ordem recomendada de uso.</span>
+            </div>
+            <span class="badge-soft"><i class="bi bi-check2-square"></i> Rotina</span>
+          </div>
+
+          <ul class="work-list">
+            <li><i class="bi bi-check-circle-fill"></i><span>Cadastre os tipos de servico antes de abrir chamados.</span></li>
+            <li><i class="bi bi-check-circle-fill"></i><span>Informe abertura e conclusao para calcular tempo e valor.</span></li>
+            <li><i class="bi bi-check-circle-fill"></i><span>Use o relatorio para conferir o total por periodo.</span></li>
+          </ul>
+        </aside>
+      </section>
     </div>
-
-  </div>
-
+  </main>
 </body>
 
 </html>

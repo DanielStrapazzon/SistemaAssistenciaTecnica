@@ -38,8 +38,8 @@ async function gerarRelatorio() {
 
       tabela.innerHTML += `
         <tr>
-          <td>${c.cliente}</td>
-          <td>${c.tipo_servico}</td>
+          <td class="fw-semibold">${c.cliente}</td>
+          <td><span class="badge-soft">${c.tipo_servico}</span></td>
           <td>${parseFloat(c.tempo_horas || 0).toFixed(2)}</td>
           <td class="text-success fw-semibold">
             R$ ${valor.toFixed(2)}
@@ -52,6 +52,7 @@ async function gerarRelatorio() {
 
   } catch (error) {
     console.error(error);
+    notify("Erro ao carregar relatorio.", "error");
 
     tabela.innerHTML = `
       <tr>

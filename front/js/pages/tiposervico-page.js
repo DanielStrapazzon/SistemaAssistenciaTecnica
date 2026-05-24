@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("TIPO SERVICO PAGE CARREGOU");
   carregarTipos();
 });
 
@@ -7,9 +6,17 @@ async function carregarTipos() {
   const tabela = document.querySelector("#tabela-tiposervico");
 
   if (!tabela) {
-    console.error("Tabela não encontrada");
+    console.error("Tabela nao encontrada");
     return;
   }
+
+  tabela.innerHTML = `
+    <tr>
+      <td colspan="5" class="text-center text-muted py-4">
+        Carregando servicos...
+      </td>
+    </tr>
+  `;
 
   try {
     const tipos = await getTipos();
@@ -19,7 +26,7 @@ async function carregarTipos() {
     if (!tipos.length) {
       tabela.innerHTML = `
         <tr>
-          <td colspan="5" class="text-center text-muted">
+          <td colspan="5" class="text-center text-muted py-4">
             Nenhum tipo cadastrado
           </td>
         </tr>
@@ -31,25 +38,25 @@ async function carregarTipos() {
       tabela.innerHTML += `
         <tr>
           <td>${tipo.idtiposervico}</td>
-          <td>${tipo.descricao}</td>
-          <td>${tipo.tipo_cobranca}</td>
-          <td>R$ ${parseFloat(tipo.valor).toFixed(2)}</td>
+          <td class="fw-semibold">${tipo.descricao}</td>
+          <td><span class="badge-soft">${tipo.tipo_cobranca}</span></td>
+          <td class="fw-semibold">R$ ${parseFloat(tipo.valor).toFixed(2)}</td>
           <td class="text-center">
-            <button class="btn btn-danger btn-sm"
+            <button class="btn btn-outline-danger btn-sm"
               onclick="excluirTipo(${tipo.idtiposervico})">
-              Excluir
+              <i class="bi bi-trash3 me-1"></i>Excluir
             </button>
           </td>
         </tr>
       `;
     });
-
   } catch (error) {
     console.error(error);
+    notify("Erro ao carregar tipos de servico.", "error");
 
     tabela.innerHTML = `
       <tr>
-        <td colspan="5" class="text-center text-danger">
+        <td colspan="5" class="text-center text-danger py-4">
           Erro ao carregar dados
         </td>
       </tr>
@@ -63,7 +70,7 @@ async function salvarTipo() {
   const valor = document.querySelector("#valor").value;
 
   if (!descricao || !valor) {
-    alert("Preencha todos os campos");
+    notify("Preencha descricao e valor.", "warning");
     return;
   }
 
@@ -74,36 +81,40 @@ async function salvarTipo() {
       valor: parseFloat(valor)
     });
 
-    // fechar modal corretamente
     const modalEl = document.getElementById("modalTipo");
     const modal = bootstrap.Modal.getInstance(modalEl) || new bootstrap.Modal(modalEl);
     modal.hide();
 
-    // limpar campos
     document.querySelector("#descricao").value = "";
     document.querySelector("#valor").value = "";
 
-    // recarregar tabela
+    notify("Tipo de servico salvo com sucesso.", "success");
     carregarTipos();
-
   } catch (error) {
     console.error(error);
-    alert("Erro ao salvar");
+    notify("Erro ao salvar tipo de servico.", "error");
   }
 }
 
 window.excluirTipo = async function(id) {
-  if (!confirm("Deseja excluir este tipo de serviço?")) return;
+  const confirmado = await confirmAction({
+    title: "Excluir tipo de servico",
+    message: "Esta acao remove o tipo selecionado da tabela de servicos.",
+    confirmText: "Excluir",
+    danger: true
+  });
+
+  if (!confirmado) return;
 
   try {
     await fetch(`${API_BASE}/tipo-servico/${id}`, {
       method: "DELETE"
     });
 
-    carregarTipos(); // recarrega a tabela
-
+    notify("Tipo de servico excluido.", "success");
+    carregarTipos();
   } catch (error) {
     console.error(error);
-    alert("Erro ao excluir");
+    notify("Erro ao excluir tipo de servico.", "error");
   }
 }
