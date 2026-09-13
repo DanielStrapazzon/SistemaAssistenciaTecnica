@@ -1,6 +1,24 @@
+let empresasCache = [];
+
 document.addEventListener("DOMContentLoaded", () => {
-  carregarSolicitacoes();
+  inicializar();
 });
+
+async function inicializar() {
+  await carregarEmpresas();
+  await carregarSolicitacoes();
+}
+
+async function carregarEmpresas() {
+  try {
+    const resposta = await fetch("/api/empresa", { credentials: "same-origin" });
+    if (resposta.ok) {
+      empresasCache = await resposta.json();
+    }
+  } catch (error) {
+    console.error("Erro ao carregar empresas:", error);
+  }
+}
 
 async function carregarSolicitacoes() {
   const listaPendentes = document.querySelector("#lista-pendentes");
@@ -42,27 +60,57 @@ function renderizarPendentes(pendentes) {
     return;
   }
 
+  const opcoesEmpresas = empresasCache.map(e =>
+    `<option value="${e.idempresa}">${escapeHtml(e.nome)}</option>`
+  ).join("");
+
   container.innerHTML = pendentes.map(s => `
-    <div class="quick-action" style="cursor:default;">
+    <div class="quick-action" style="cursor:default; flex-wrap: wrap;">
       <span class="action-icon"><i class="bi bi-person-plus"></i></span>
-      <span>
+      <span style="flex: 1 1 260px;">
         <h2>${escapeHtml(s.nome)}</h2>
         <p>
           ${escapeHtml(s.email)}
-          ${s.empresa ? " · " + escapeHtml(s.empresa) : ""}
+          ${s.empresa ? " · sugeriu: " + escapeHtml(s.empresa) : ""}
           ${s.motivo ? "<br>" + escapeHtml(s.motivo) : ""}
         </p>
       </span>
-      <span class="d-flex gap-2">
-        <button class="btn btn-success btn-sm" data-acao="aprovar" data-id="${s.idsolicitacao}">
-          <i class="bi bi-check2"></i> Aprovar
-        </button>
-        <button class="btn btn-outline-danger btn-sm" data-acao="rejeitar" data-id="${s.idsolicitacao}">
-          <i class="bi bi-x"></i> Rejeitar
-        </button>
+
+      <span class="d-flex flex-column gap-2" style="min-width: 240px;" data-linha="${s.idsolicitacao}">
+        <select class="form-select form-select-sm" data-campo="empresa-select">
+          <option value="__nova__">+ Criar empresa nova</option>
+          ${opcoesEmpresas}
+        </select>
+        <input
+          type="text"
+          class="form-control form-control-sm"
+          data-campo="empresa-nova-nome"
+          placeholder="Nome da nova empresa"
+          value="${escapeHtml(s.empresa || "")}"
+        >
+        <span class="d-flex gap-2">
+          <button class="btn btn-success btn-sm flex-fill" data-acao="aprovar" data-id="${s.idsolicitacao}">
+            <i class="bi bi-check2"></i> Aprovar
+          </button>
+          <button class="btn btn-outline-danger btn-sm flex-fill" data-acao="rejeitar" data-id="${s.idsolicitacao}">
+            <i class="bi bi-x"></i> Rejeitar
+          </button>
+        </span>
       </span>
     </div>
   `).join("");
+
+  container.querySelectorAll("[data-campo='empresa-select']").forEach(select => {
+    const linha = select.closest("[data-linha]");
+    const inputNovaEmpresa = linha.querySelector("[data-campo='empresa-nova-nome']");
+
+    function atualizarVisibilidade() {
+      inputNovaEmpresa.style.display = select.value === "__nova__" ? "block" : "none";
+    }
+
+    select.addEventListener("change", atualizarVisibilidade);
+    atualizarVisibilidade();
+  });
 
   container.querySelectorAll("[data-acao='aprovar']").forEach(btn => {
     btn.addEventListener("click", () => aprovar(btn.dataset.id, btn));
@@ -92,6 +140,19 @@ function renderizarHistorico(historico) {
 }
 
 async function aprovar(id, botao) {
+  const linha = document.querySelector(`[data-linha="${id}"]`);
+  const select = linha.querySelector("[data-campo='empresa-select']");
+  const inputNovaEmpresa = linha.querySelector("[data-campo='empresa-nova-nome']");
+
+  const corpo = select.value === "__nova__"
+    ? { novaEmpresa: inputNovaEmpresa.value.trim() }
+    : { idempresa: select.value };
+
+  if (select.value === "__nova__" && !corpo.novaEmpresa) {
+    if (typeof notify === "function") notify("Informe o nome da nova empresa.", "warning");
+    return;
+  }
+
   const confirmado = window.confirm
     ? window.confirm("Aprovar esta solicitação e criar o usuário?")
     : true;
@@ -103,7 +164,9 @@ async function aprovar(id, botao) {
   try {
     const resposta = await fetch(`/api/solicitacao-acesso/${id}/aprovar`, {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
       credentials: "same-origin",
+      body: JSON.stringify(corpo),
     });
 
     const dados = await resposta.json().catch(() => ({}));
@@ -119,8 +182,8 @@ async function aprovar(id, botao) {
     document.querySelector("#senha-gerada-aviso").style.display = "block";
     document.querySelector("#senha-gerada-aviso").scrollIntoView({ behavior: "smooth" });
 
-    if (typeof notify === "function") notify("Usuário aprovado com sucesso.", "success");
-    carregarSolicitacoes();
+    if (typeof notify === "function") notify(`Usuário aprovado na empresa "${dados.empresa}".`, "success");
+    inicializar();
   } catch (error) {
     console.error(error);
     if (typeof notify === "function") notify("Erro ao conectar com o servidor.", "error");
