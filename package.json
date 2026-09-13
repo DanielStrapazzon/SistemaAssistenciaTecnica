@@ -4,11 +4,15 @@
   "private": true,
   "type": "module",
   "dependencies": {
+    "@vercel/functions": "^3.9.7",
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "sequelize": "^6.37.8",
+    "jsonwebtoken": "^9.0.3",
     "pg": "^8.21.0",
     "pg-hstore": "^2.3.4",
-    "dotenv": "^17.4.2"
+    "sequelize": "^6.37.8"
   }
 }
