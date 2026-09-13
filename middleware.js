@@ -3,12 +3,13 @@ import { next } from "@vercel/functions";
 
 export const config = {
   runtime: "nodejs",
-  matcher: [
+matcher: [
     "/",
     "/index.html",
     "/chamado.html",
     "/relatorio.html",
     "/tiposervico.html",
+    "/admin-solicitacoes.html",
     "/login.html",
   ],
 };

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login — Bancada</title>
+<title>Solicitar acesso — Assistência Técnica</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
@@ -19,8 +19,8 @@
           <span class="mark"><i class="bi bi-tools"></i></span>
           <span class="name">Assistência Técnica</span>
         </div>
-        <div class="side-headline display-font">Do primeiro chamado até a nota final, tudo em um lugar.</div>
-        <div class="side-sub">Cadastre tipos de serviço, abra chamados e acompanhe o tempo e o valor de cada atendimento automaticamente.</div>
+        <div class="side-headline display-font">Peça acesso ao sistema.</div>
+        <div class="side-sub">Preencha seus dados abaixo. Um administrador vai revisar seu pedido e liberar seu acesso.</div>
       </div>
 
       <ul class="feature-list">
@@ -37,47 +37,56 @@
 
     <div class="side-form">
       <div class="form-card">
-        <h1>Bem-vindo de volta</h1>
-        <p class="lead">Entre com suas credenciais para acessar o painel.</p>
+        <h1>Solicitar acesso</h1>
+        <p class="lead">Um administrador vai revisar e liberar seu login.</p>
 
-        <div id="login-error" class="login-error-box"></div>
+        <div id="solicitacao-erro" class="login-error-box"></div>
+        <div id="solicitacao-sucesso" class="login-sucesso-box"></div>
 
-        <form id="login-form">
+        <form id="solicitacao-form">
+          <div class="field">
+            <label for="nome">Nome completo</label>
+            <div class="input-wrap">
+              <i class="bi bi-person"></i>
+              <input type="text" id="nome" placeholder="Seu nome" required>
+            </div>
+          </div>
+
           <div class="field">
             <label for="email">E-mail</label>
             <div class="input-wrap">
               <i class="bi bi-envelope"></i>
-              <input type="email" id="email" placeholder="voce@empresa.com.br">
+              <input type="email" id="email" placeholder="voce@empresa.com.br" required>
             </div>
           </div>
 
           <div class="field">
-            <label for="senha">Senha</label>
+            <label for="empresa">Empresa (opcional)</label>
             <div class="input-wrap">
-              <i class="bi bi-lock"></i>
-              <input type="password" id="senha" placeholder="••••••••">
+              <i class="bi bi-building"></i>
+              <input type="text" id="empresa" placeholder="Nome da empresa">
             </div>
           </div>
 
-          <div class="row-between">
-            <label class="remember">
-              <input type="checkbox">
-              Manter conectado
-            </label>
-            <a href="#">Esqueci minha senha</a>
+          <div class="field">
+            <label for="motivo">Por que você precisa de acesso? (opcional)</label>
+            <div class="input-wrap">
+              <i class="bi bi-chat-left-text"></i>
+              <input type="text" id="motivo" placeholder="Conte um pouco do motivo">
+            </div>
           </div>
 
-          <button class="btn-enter" type="submit" id="btn-entrar">
-            Entrar
+          <button class="btn-enter" type="submit" id="btn-solicitar">
+            Enviar solicitação
             <i class="bi bi-arrow-right"></i>
           </button>
         </form>
 
-        <div class="form-foot">Acesso restrito à equipe técnica · <a href="solicitar-acesso.html">Solicitar acesso</a></div>
+        <div class="form-foot"><a href="login.html">Já tem uma conta? Entrar</a></div>
       </div>
     </div>
   </div>
 
-  <script src="front/js/pages/login-page.js"></script>
+  <script src="front/js/pages/solicitar-acesso-page.js"></script>
 </body>
 </html>

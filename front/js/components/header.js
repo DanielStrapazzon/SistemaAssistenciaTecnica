@@ -69,6 +69,19 @@ function renderAppHeader() {
     if (nomeEl && event.detail?.nome) {
       nomeEl.textContent = event.detail.nome;
     }
+        if (event.detail?.perfil === 1) {
+      const menuLista = document.querySelector(".app-navbar .nav-pills");
+      if (menuLista && !menuLista.querySelector("[data-menu='admin']")) {
+        const item = document.createElement("li");
+        item.className = "nav-item";
+        item.innerHTML = `
+          <a class="nav-link" data-menu="admin" href="admin-solicitacoes.html">
+            Solicitações
+          </a>
+        `;
+        menuLista.appendChild(item);
+      }
+    }
   });
 }
 

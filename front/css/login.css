@@ -213,3 +213,17 @@ body {
 .login-error-box.show {
   display: block;
 }
+
+.login-sucesso-box {
+  display: none;
+  background: #eafaf1;
+  border: 1px solid #a9e8c6;
+  color: #0f6b3f;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 0.85rem;
+  margin-bottom: 18px;
+}
+.login-sucesso-box.show {
+  display: block;
+}

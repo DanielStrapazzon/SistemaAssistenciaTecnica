@@ -5,9 +5,12 @@ import UsuarioController from "./controllers/UsuarioController.js";
 import ChamadoController from "./controllers/ChamadoController.js";
 import TipoServicoController from "./controllers/TipoServicoController.js";
 import AuthController from "./controllers/AuthController.js";
+import SolicitacaoAcessoController from "./controllers/SolicitacaoAcessoController.js";
 
 import { exigirLogin } from "./middleware/exigirLogin.js";
+import { exigirAdmin } from "./middleware/exigirAdmin.js";
 import { limitarTentativasLogin } from "./middleware/limitarTentativasLogin.js";
+import { criarLimitador } from "./middleware/criarLimitador.js";
 
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -18,6 +21,12 @@ api.use(cors({ origin: true, credentials: true }));
 api.use(Express.json());
 api.use(cookieParser());
 
+const limitarSolicitacaoAcesso = criarLimitador({
+  janelaMs: 60 * 60 * 1000,
+  limite: 5,
+  mensagem: "Muitas solicitações vindas deste endereço. Tente novamente mais tarde.",
+});
+
 api.get('/api/teste', (req, res) => {
     res.send('API funcionando');
 }); 
@@ -25,6 +34,13 @@ api.get('/api/teste', (req, res) => {
 api.post('/api/login', limitarTentativasLogin, AuthController.login);
 api.post('/api/logout', AuthController.logout);
 api.get('/api/me', exigirLogin, AuthController.me);
+
+api.post('/api/solicitacao-acesso', limitarSolicitacaoAcesso, SolicitacaoAcessoController.criar);
+
+api.use('/api/solicitacao-acesso', exigirLogin, exigirAdmin);
+api.get('/api/solicitacao-acesso', SolicitacaoAcessoController.listar);
+api.post('/api/solicitacao-acesso/:id/aprovar', SolicitacaoAcessoController.aprovar);
+api.post('/api/solicitacao-acesso/:id/rejeitar', SolicitacaoAcessoController.rejeitar);
 
 api.use(['/api/usuario', '/api/chamado', '/api/tipo-servico'], exigirLogin);
 
