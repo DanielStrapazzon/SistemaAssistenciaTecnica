@@ -4,19 +4,32 @@ import Usuario from "../models/Usuario.js";
 const SEM_SENHA = { exclude: ["senha_hash"] };
 
 async function listar(req, res) {
-  const dados = await Usuario.findAll({ attributes: SEM_SENHA });
+  const dados = await Usuario.findAll({
+    where: { idempresa: req.usuario.idempresa },
+    attributes: SEM_SENHA,
+  });
   return res.json(dados);
 }
 
 async function selecionar(req, res) {
   const idusuario = req.params.id;
-  const dados = await Usuario.findByPk(idusuario, { attributes: SEM_SENHA });
+  const dados = await Usuario.findOne({
+    where: { idusuario, idempresa: req.usuario.idempresa },
+    attributes: SEM_SENHA,
+  });
+
+  if (!dados) {
+    return res.status(404).json({ erro: "Usuário não encontrado." });
+  }
+
   return res.json(dados);
 }
 
 async function excluir(req, res) {
   const idusuario = req.params.id;
-  const dados = await Usuario.destroy({ where: { idusuario: idusuario } });
+  const dados = await Usuario.destroy({
+    where: { idusuario, idempresa: req.usuario.idempresa }
+  });
   return res.json(dados);
 }
 
@@ -37,6 +50,7 @@ async function inserir(req, res) {
       perfil,
       status,
       senha_hash,
+      idempresa: req.usuario.idempresa,
     });
 
     const { senha_hash: _omitido, ...usuarioSemSenha } = dados.toJSON();
@@ -62,7 +76,7 @@ async function alterar(req, res) {
     }
 
     const dados = await Usuario.update(camposParaAtualizar, {
-      where: { idusuario: idusuario }
+      where: { idusuario, idempresa: req.usuario.idempresa }
     });
 
     return res.json(dados);

@@ -6,6 +6,7 @@ import ChamadoController from "./controllers/ChamadoController.js";
 import TipoServicoController from "./controllers/TipoServicoController.js";
 import AuthController from "./controllers/AuthController.js";
 import SolicitacaoAcessoController from "./controllers/SolicitacaoAcessoController.js";
+import EmpresaController from "./controllers/EmpresaController.js";
 
 import { exigirLogin } from "./middleware/exigirLogin.js";
 import { exigirAdmin } from "./middleware/exigirAdmin.js";
@@ -41,6 +42,8 @@ api.use('/api/solicitacao-acesso', exigirLogin, exigirAdmin);
 api.get('/api/solicitacao-acesso', SolicitacaoAcessoController.listar);
 api.post('/api/solicitacao-acesso/:id/aprovar', SolicitacaoAcessoController.aprovar);
 api.post('/api/solicitacao-acesso/:id/rejeitar', SolicitacaoAcessoController.rejeitar);
+
+api.get('/api/empresa', exigirLogin, exigirAdmin, EmpresaController.listar);
 
 api.use(['/api/usuario', '/api/chamado', '/api/tipo-servico'], exigirLogin);
 

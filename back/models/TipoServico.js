@@ -10,23 +10,12 @@ const TipoServico = banco.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    descricao: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
-    },
-    tipo_cobranca: {
-      type: DataTypes.STRING(10), // 'hora' ou 'fixo'
-      allowNull: false,
-    },
-    valor: {
-      type: DataTypes.DECIMAL(10,2),
-      allowNull: false,
-    },
+    idempresa: { type: DataTypes.BIGINT, allowNull: false },
+    descricao: { type: DataTypes.STRING(100), allowNull: false },
+    tipo_cobranca: { type: DataTypes.STRING(10), allowNull: false },
+    valor: { type: DataTypes.DECIMAL(10,2), allowNull: false },
   },
-  {
-    tableName: "tipo_servico",
-    timestamps: false,
-  }
+  { tableName: "tipo_servico", timestamps: false }
 );
 
 export default TipoServico;

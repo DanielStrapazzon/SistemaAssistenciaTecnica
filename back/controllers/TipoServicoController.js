@@ -1,61 +1,81 @@
 import TipoServico from "../models/TipoServico.js";
 
-//Regras de Negócios
-
-async function listar (req, res) {
+async function listar(req, res) {
   try {
-    const dados = await TipoServico.findAll();
+    const dados = await TipoServico.findAll({
+      where: { idempresa: req.usuario.idempresa }
+    });
     return res.json(dados);
   } catch (error) {
     console.error("ERRO NO TIPOSERVICO:", error);
-    return res.status(500).json({
-      erro: error.message
-    });
+    return res.status(500).json({ erro: error.message });
   }
 }
 
-async function selecionar (req, res) {
-  const idtiposervico = req.params.id;
-  const dados = await TipoServico.findByPk(idtiposervico);
-  return res.json(dados);
+async function selecionar(req, res) {
+  try {
+    const idtiposervico = req.params.id;
+    const dados = await TipoServico.findOne({
+      where: { idtiposervico, idempresa: req.usuario.idempresa }
+    });
+
+    if (!dados) {
+      return res.status(404).json({ erro: "Tipo de serviço não encontrado." });
+    }
+
+    return res.json(dados);
+  } catch (error) {
+    console.error("ERRO AO SELECIONAR TIPOSERVICO:", error);
+    return res.status(500).json({ erro: "Erro ao buscar o tipo de serviço." });
+  }
 }
 
-async function excluir (req, res) {
-  const idtiposervico = req.params.id;
-  const dados = await TipoServico.destroy({ where: { idtiposervico: idtiposervico } });
-  return res.json(dados);
+async function excluir(req, res) {
+  try {
+    const idtiposervico = req.params.id;
+    const dados = await TipoServico.destroy({
+      where: { idtiposervico, idempresa: req.usuario.idempresa }
+    });
+    return res.json(dados);
+  } catch (error) {
+    console.error("ERRO AO EXCLUIR TIPOSERVICO:", error);
+    return res.status(500).json({ erro: "Erro ao excluir o tipo de serviço." });
+  }
 }
 
-async function inserir (req, res) {
-  const descricao = req.body.descricao;
-  const tipo_cobranca = req.body.tipo_cobranca;
-  const valor = req.body.valor;
+async function inserir(req, res) {
+  try {
+    const { descricao, tipo_cobranca, valor } = req.body;
 
-  const dados = await TipoServico.create({ 
-    descricao: descricao,
-    tipo_cobranca: tipo_cobranca,
-    valor: valor
-  });
+    const dados = await TipoServico.create({
+      descricao,
+      tipo_cobranca,
+      valor,
+      idempresa: req.usuario.idempresa,
+    });
 
-  return res.json(dados);
+    return res.json(dados);
+  } catch (error) {
+    console.error("ERRO AO CRIAR TIPOSERVICO:", error);
+    return res.status(500).json({ erro: "Erro ao criar o tipo de serviço." });
+  }
 }
 
 async function alterar(req, res) {
-  const idtiposervico = req.params.id;
-  const descricao = req.body.descricao;
-  const tipo_cobranca = req.body.tipo_cobranca;
-  const valor = req.body.valor;
+  try {
+    const idtiposervico = req.params.id;
+    const { descricao, tipo_cobranca, valor } = req.body;
 
-  const dados = await TipoServico.update({ 
-    descricao: descricao, 
-    tipo_cobranca: tipo_cobranca, 
-    valor: valor 
-  }, 
-  {
-    where: { idtiposervico: idtiposervico }
-  });
+    const dados = await TipoServico.update(
+      { descricao, tipo_cobranca, valor },
+      { where: { idtiposervico, idempresa: req.usuario.idempresa } }
+    );
 
-  return res.json(dados);
+    return res.json(dados);
+  } catch (error) {
+    console.error("ERRO AO ALTERAR TIPOSERVICO:", error);
+    return res.status(500).json({ erro: "Erro ao alterar o tipo de serviço." });
+  }
 }
 
 export default { listar, selecionar, excluir, inserir, alterar };

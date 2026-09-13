@@ -10,30 +10,13 @@ const Usuario = banco.define(
       primaryKey: true,
       autoIncrement: true,
     },
-    nome: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    email: {
-      type: DataTypes.STRING, 
-      allowNull: false,
-    },
-    matricula: {
-      type: DataTypes.STRING, 
-      allowNull: false,
-    },
-    senha_hash: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    perfil: {
-      type: DataTypes.INTEGER, 
-      allowNull: false,
-    },
-    status: {
-      type: DataTypes.INTEGER, 
-      allowNull: false,
-    },
+    nome: { type: DataTypes.STRING, allowNull: false },
+    email: { type: DataTypes.STRING, allowNull: false },
+    matricula: { type: DataTypes.STRING, allowNull: false },
+    idempresa: { type: DataTypes.BIGINT, allowNull: false },
+    senha_hash: { type: DataTypes.STRING, allowNull: false },
+    perfil: { type: DataTypes.INTEGER, allowNull: false },
+    status: { type: DataTypes.INTEGER, allowNull: false },
   },
 );
 

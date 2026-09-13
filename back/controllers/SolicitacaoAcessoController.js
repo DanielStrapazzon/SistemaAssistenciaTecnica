@@ -2,6 +2,7 @@ import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import SolicitacaoAcesso from "../models/SolicitacaoAcesso.js";
 import Usuario from "../models/Usuario.js";
+import Empresa from "../models/Empresa.js";
 
 function gerarSenhaTemporaria() {
   const palavras = ["brisa", "vento", "lume", "porto", "campo", "verde", "prata", "aurora", "chave", "torre"];
@@ -56,6 +57,12 @@ async function listar(req, res) {
 async function aprovar(req, res) {
   try {
     const idsolicitacao = req.params.id;
+    const { idempresa, novaEmpresa } = req.body;
+
+    if (!idempresa && !novaEmpresa) {
+      return res.status(400).json({ erro: "Informe uma empresa existente ou o nome de uma empresa nova." });
+    }
+
     const solicitacao = await SolicitacaoAcesso.findByPk(idsolicitacao);
 
     if (!solicitacao) {
@@ -72,6 +79,17 @@ async function aprovar(req, res) {
       return res.status(400).json({ erro: "Já existe um usuário cadastrado com este e-mail." });
     }
 
+    let empresa;
+
+    if (idempresa) {
+      empresa = await Empresa.findByPk(idempresa);
+      if (!empresa) {
+        return res.status(400).json({ erro: "Empresa selecionada não encontrada." });
+      }
+    } else {
+      empresa = await Empresa.create({ nome: String(novaEmpresa).trim() });
+    }
+
     const senhaTemporaria = gerarSenhaTemporaria();
     const senha_hash = await bcrypt.hash(senhaTemporaria, 10);
 
@@ -82,6 +100,7 @@ async function aprovar(req, res) {
       senha_hash,
       perfil: 2,
       status: 1,
+      idempresa: empresa.idempresa,
     });
 
     solicitacao.status = "aprovada";
@@ -92,6 +111,7 @@ async function aprovar(req, res) {
       mensagem: "Usuário criado com sucesso.",
       email: solicitacao.email,
       senhaTemporaria,
+      empresa: empresa.nome,
     });
   } catch (error) {
     console.error("ERRO AO APROVAR SOLICITACAO:", error);
