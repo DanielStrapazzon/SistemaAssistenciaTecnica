@@ -199,3 +199,17 @@ body {
   .side-brand { margin-bottom: 32px; }
   .feature-list { display: none; }
 }
+
+.login-error-box {
+  display: none;
+  background: #fdecec;
+  border: 1px solid #f4b9b9;
+  color: #a41616;
+  border-radius: 6px;
+  padding: 10px 12px;
+  font-size: 0.85rem;
+  margin-bottom: 18px;
+}
+.login-error-box.show {
+  display: block;
+}
