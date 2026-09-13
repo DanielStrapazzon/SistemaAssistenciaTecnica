@@ -4,21 +4,29 @@ import banco from "./Banco.js";
 import UsuarioController from "./controllers/UsuarioController.js"; 
 import ChamadoController from "./controllers/ChamadoController.js";
 import TipoServicoController from "./controllers/TipoServicoController.js";
+import AuthController from "./controllers/AuthController.js";
+
+import { exigirLogin } from "./middleware/exigirLogin.js";
+import { limitarTentativasLogin } from "./middleware/limitarTentativasLogin.js";
 
 import cors from "cors";
-
-//Métodos da API
-// IMPORTANTE: todas as rotas usam o prefixo /api porque, no Vercel, o
-// front-end vai chamar https://seu-projeto.vercel.app/api/... e essa é a
-// função serverless que responde por esse caminho (ver /api/index.js e vercel.json).
+import cookieParser from "cookie-parser";
 
 const api = Express();
-api.use(cors());
+
+api.use(cors({ origin: true, credentials: true }));
 api.use(Express.json());
+api.use(cookieParser());
 
 api.get('/api/teste', (req, res) => {
     res.send('API funcionando');
 }); 
+
+api.post('/api/login', limitarTentativasLogin, AuthController.login);
+api.post('/api/logout', AuthController.logout);
+api.get('/api/me', exigirLogin, AuthController.me);
+
+api.use(['/api/usuario', '/api/chamado', '/api/tipo-servico'], exigirLogin);
 
 api.get('/api/usuario', UsuarioController.listar);
 api.get('/api/usuario/:id', UsuarioController.selecionar);
@@ -40,8 +48,6 @@ api.delete('/api/tipo-servico/:id', TipoServicoController.excluir);
 api.post('/api/tipo-servico', TipoServicoController.inserir);
 api.put('/api/tipo-servico/:id', TipoServicoController.alterar);
 
-// No Vercel, quem "liga" a API é a própria plataforma (função serverless).
-// Só chamamos api.listen() quando rodamos localmente com `node index.js`.
 if (!process.env.VERCEL) {
   try {
     await banco.authenticate();

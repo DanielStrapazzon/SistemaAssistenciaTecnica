@@ -1,7 +1,6 @@
 import banco from "../Banco.js";
 import { DataTypes } from "sequelize";
 
-//Modelo de usuário
 const Usuario = banco.define(
   'usuario',
   {
@@ -21,6 +20,10 @@ const Usuario = banco.define(
     },
     matricula: {
       type: DataTypes.STRING, 
+      allowNull: false,
+    },
+    senha_hash: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
     perfil: {
