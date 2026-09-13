@@ -1,1 +1,1 @@
-const API_BASE = "http://localhost:4002"; // ajuste para seu backend
+const API_BASE = "/api"; // caminho relativo: funciona em produção (Vercel) e em qualquer dispositivo
