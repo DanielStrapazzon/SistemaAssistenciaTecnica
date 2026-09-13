@@ -4,10 +4,18 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 let tipos = [];
+let expediente = null;
 
 async function init() {
   try {
-    tipos = await getTipos();
+    [tipos, expediente] = await Promise.all([
+      getTipos(),
+      getHorarioExpediente().catch((erro) => {
+        console.error("Erro ao carregar horário de expediente", erro);
+        notify("Não foi possível carregar o horário de expediente configurado. Configure em Administrador > Expediente.", "warning");
+        return null;
+      }),
+    ]);
 
     const select = document.querySelector("#idtipo");
     select.innerHTML = `<option value="">Selecione...</option>`;
@@ -51,7 +59,7 @@ function calcular() {
 
   if (!tipo) return;
 
-  const tempo = calcularTempoHoras(inicio, fim);
+  const tempo = calcularTempoHoras(inicio, fim, expediente);
   const valor = calcularValor(tipo, tempo);
 
   document.querySelector("#tempo").value = tempo.toFixed(2);

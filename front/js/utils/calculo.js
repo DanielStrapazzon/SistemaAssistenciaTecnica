@@ -1,40 +1,30 @@
 // ================= TEMPO POR EXPEDIENTE =================
-function calcularTempoHoras(inicioStr, fimStr) {
+function calcularTempoHoras(inicioStr, fimStr, expediente) {
   const inicio = moment(inicioStr);
   const fim = moment(fimStr);
 
   if (!fim.isAfter(inicio)) return 0;
+  if (!expediente) return 0;
 
   let totalMin = 0;
   let atual = inicio.clone();
 
   while (atual.isBefore(fim)) {
+    const diaSemana = atual.day();
+    const periodos = expediente[diaSemana] || expediente[String(diaSemana)] || [];
 
-    const diaSemana = atual.day(); // 0=Dom, 6=Sáb
-
-    // 🔴 DOMINGO → ignora
-    if (diaSemana === 0) {
-      atual.add(1, "day").startOf("day");
-      continue;
-    }
-
-    // 🔵 SÁBADO → 08:00 às 12:00
-    if (diaSemana === 6) {
-      totalMin += calcularPeriodo(atual, fim, 8, 0, 12, 0);
-    } 
-    // 🟢 SEG–SEX → manhã + tarde
-    else {
-      totalMin += calcularPeriodo(atual, fim, 8, 0, 12, 0);
-      totalMin += calcularPeriodo(atual, fim, 13, 30, 17, 30);
+    for (const periodo of periodos) {
+      const [hIni, mIni] = periodo.inicio.split(":").map(Number);
+      const [hFim, mFim] = periodo.fim.split(":").map(Number);
+      totalMin += calcularPeriodo(atual, fim, hIni, mIni, hFim, mFim);
     }
 
     atual.add(1, "day").startOf("day");
   }
 
-  return totalMin / 60; // retorna em horas
+  return totalMin / 60;
 }
 
-// ================= INTERVALO =================
 function calcularPeriodo(atual, fim, hIni, mIni, hFim, mFim) {
   const inicioPeriodo = atual.clone().hour(hIni).minute(mIni).second(0);
   const fimPeriodo = atual.clone().hour(hFim).minute(mFim).second(0);
@@ -45,7 +35,6 @@ function calcularPeriodo(atual, fim, hIni, mIni, hFim, mFim) {
   return f.isAfter(ini) ? f.diff(ini, "minutes") : 0;
 }
 
-// ================= VALOR =================
 function calcularValor(tipo, tempoHoras) {
   if (!tipo) return 0;
 

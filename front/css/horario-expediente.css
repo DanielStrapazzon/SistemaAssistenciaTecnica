@@ -1,0 +1,48 @@
+.dia-linha {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--app-border);
+}
+.dia-linha:last-child {
+  border-bottom: none;
+}
+
+.dia-nome {
+  width: 110px;
+  flex-shrink: 0;
+  font-weight: 600;
+  padding-top: 6px;
+}
+
+.dia-conteudo {
+  flex: 1;
+}
+
+.dia-fechado-label {
+  color: var(--app-muted);
+  font-size: 0.9rem;
+  padding-top: 6px;
+}
+
+.periodo-linha {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.periodo-linha input[type="time"] {
+  max-width: 130px;
+}
+
+.btn-remover-periodo {
+  color: #dc3545;
+  background: none;
+  border: none;
+  padding: 4px 8px;
+}
+
+.btn-add-periodo {
+  font-size: 0.85rem;
+}

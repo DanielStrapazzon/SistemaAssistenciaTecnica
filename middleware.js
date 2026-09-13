@@ -11,6 +11,7 @@ matcher: [
     "/tiposervico.html",
     "/admin-solicitacoes.html",
     "/login.html",
+    "/horario-expediente.html",
   ],
 };
 

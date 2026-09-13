@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-store">
+  <link rel="icon" type="image/svg+xml" href="front/img/favicon.svg?v=2">
+  <title>Horário de Expediente — Assistencia Tecnica</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="front/css/style.css?v=6" rel="stylesheet">
+  <link href="front/css/horario-expediente.css?v=1" rel="stylesheet">
+  <script src="front/js/auth-guard.js?v=1" defer></script>
+  <script src="front/js/components/header.js?v=6" defer></script>
+  <script src="front/js/components/feedback.js?v=6" defer></script>
+  <script src="front/js/api/config.js?v=6" defer></script>
+  <script src="front/js/api/horario-expediente.js?v=1" defer></script>
+  <script src="front/js/pages/horario-expediente-page.js?v=1" defer></script>
+</head>
+
+<body>
+  <main class="app-shell">
+    <div class="container">
+      <div id="app-header"></div>
+
+      <section class="page-heading">
+        <span class="eyebrow">Configuração</span>
+        <h1 class="page-title">Horário de Expediente</h1>
+        <p class="page-description">
+          Defina os dias e horários em que sua empresa atende. O cálculo automático de tempo e valor dos chamados usa exatamente esta configuração.
+        </p>
+      </section>
+
+      <div id="acesso-negado" class="panel dashboard-panel" style="display:none;">
+        <p class="mb-0">Somente administradores podem editar o horário de expediente. Você pode visualizar, mas não salvar alterações.</p>
+      </div>
+
+      <section class="panel dashboard-panel">
+        <div id="dias-container">
+          <p class="text-muted">Carregando...</p>
+        </div>
+
+        <div class="d-flex justify-content-end mt-3">
+          <button type="button" class="btn btn-primary" id="btn-salvar">
+            <i class="bi bi-check2-circle"></i> Salvar horário de expediente
+          </button>
+        </div>
+      </section>
+    </div>
+  </main>
+</body>
+
+</html>

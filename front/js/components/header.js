@@ -71,12 +71,12 @@ function renderAppHeader() {
     }
         if (event.detail?.perfil === 1) {
       const menuLista = document.querySelector(".app-navbar .nav-pills");
-      if (menuLista && !menuLista.querySelector("[data-menu='admin']")) {
+      if (menuLista && !menuLista.querySelector("[data-menu='expediente']")) {
         const item = document.createElement("li");
         item.className = "nav-item";
         item.innerHTML = `
-          <a class="nav-link" data-menu="admin" href="admin-solicitacoes.html">
-            Solicitações
+          <a class="nav-link" data-menu="expediente" href="horario-expediente.html">
+            Expediente
           </a>
         `;
         menuLista.appendChild(item);
