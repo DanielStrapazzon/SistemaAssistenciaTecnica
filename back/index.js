@@ -7,16 +7,7 @@ import TipoServicoController from "./controllers/TipoServicoController.js";
 
 import cors from "cors";
 
-//Testando a conexão com o banco de dados
-try {
-  await banco.authenticate();
-  console.log('Banco de dados conectado com sucesso!');
-} catch (error) {
-  console.error('Erro ao conectar ao banco de dados:', error);
-}
-
 //Métodos da API
-
 // IMPORTANTE: todas as rotas usam o prefixo /api porque, no Vercel, o
 // front-end vai chamar https://seu-projeto.vercel.app/api/... e essa é a
 // função serverless que responde por esse caminho (ver /api/index.js e vercel.json).
@@ -25,7 +16,7 @@ const api = Express();
 api.use(cors());
 api.use(Express.json());
 
-api.get('/teste', (req, res) => {
+api.get('/api/teste', (req, res) => {
     res.send('API funcionando');
 }); 
 
@@ -63,9 +54,3 @@ if (!process.env.VERCEL) {
 }
 
 export default api;
-
-
-
-
-
-
