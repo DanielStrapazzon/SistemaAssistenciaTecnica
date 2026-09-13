@@ -28,6 +28,12 @@ const limitarSolicitacaoAcesso = criarLimitador({
   mensagem: "Muitas solicitações vindas deste endereço. Tente novamente mais tarde.",
 });
 
+const limitarEsqueciSenha = criarLimitador({
+  janelaMs: 15 * 60 * 1000,
+  limite: 5,
+  mensagem: "Muitas tentativas. Aguarde alguns minutos antes de tentar de novo.",
+});
+
 api.get('/api/teste', (req, res) => {
     res.send('API funcionando');
 }); 
@@ -35,6 +41,9 @@ api.get('/api/teste', (req, res) => {
 api.post('/api/login', limitarTentativasLogin, AuthController.login);
 api.post('/api/logout', AuthController.logout);
 api.get('/api/me', exigirLogin, AuthController.me);
+
+api.post('/api/esqueci-senha', limitarEsqueciSenha, AuthController.esqueciSenha);
+api.post('/api/redefinir-senha', limitarEsqueciSenha, AuthController.redefinirSenha);
 
 api.post('/api/solicitacao-acesso', limitarSolicitacaoAcesso, SolicitacaoAcessoController.criar);
 
