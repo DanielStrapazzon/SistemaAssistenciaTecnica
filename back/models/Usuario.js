@@ -19,6 +19,7 @@ const Usuario = banco.define(
     reset_expira_em: { type: DataTypes.DATE, allowNull: true },
     reset_tentativas: { type: DataTypes.INTEGER, allowNull: false, defaultValue: 0 },
     perfil: { type: DataTypes.INTEGER, allowNull: false },
+    super_admin: { type: DataTypes.BOOLEAN, allowNull: false, defaultValue: false },
     status: { type: DataTypes.INTEGER, allowNull: false },
   },
 );

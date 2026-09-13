@@ -3,6 +3,8 @@ import bcrypt from "bcryptjs";
 import SolicitacaoAcesso from "../models/SolicitacaoAcesso.js";
 import Usuario from "../models/Usuario.js";
 import Empresa from "../models/Empresa.js";
+import HorarioExpediente from "../models/HorarioExpediente.js";
+import { validarDias, horarioComercialPadrao } from "../utils/horarioExpediente.js";
 
 function gerarSenhaTemporaria() {
   const palavras = ["brisa", "vento", "lume", "porto", "campo", "verde", "prata", "aurora", "chave", "torre"];
@@ -57,10 +59,17 @@ async function listar(req, res) {
 async function aprovar(req, res) {
   try {
     const idsolicitacao = req.params.id;
-    const { idempresa, novaEmpresa } = req.body;
+    const { idempresa, novaEmpresa, horarioExpediente } = req.body;
 
     if (!idempresa && !novaEmpresa) {
       return res.status(400).json({ erro: "Informe uma empresa existente ou o nome de uma empresa nova." });
+    }
+
+    if (horarioExpediente) {
+      const erroHorario = validarDias(horarioExpediente);
+      if (erroHorario) {
+        return res.status(400).json({ erro: `Horário de expediente inválido: ${erroHorario}` });
+      }
     }
 
     const solicitacao = await SolicitacaoAcesso.findByPk(idsolicitacao);
@@ -80,6 +89,7 @@ async function aprovar(req, res) {
     }
 
     let empresa;
+    let empresaEhNova = false;
 
     if (idempresa) {
       empresa = await Empresa.findByPk(idempresa);
@@ -88,6 +98,7 @@ async function aprovar(req, res) {
       }
     } else {
       empresa = await Empresa.create({ nome: String(novaEmpresa).trim() });
+      empresaEhNova = true;
     }
 
     const senhaTemporaria = gerarSenhaTemporaria();
@@ -98,10 +109,30 @@ async function aprovar(req, res) {
       email: solicitacao.email,
       matricula: `AUTO-${solicitacao.idsolicitacao}`,
       senha_hash,
-      perfil: 2,
+      perfil: 1,
       status: 1,
       idempresa: empresa.idempresa,
     });
+
+    if (empresaEhNova) {
+      const dias = horarioExpediente || horarioComercialPadrao();
+      const novasLinhas = [];
+
+      for (const chave of Object.keys(dias)) {
+        for (const periodo of dias[chave]) {
+          novasLinhas.push({
+            idempresa: empresa.idempresa,
+            dia_semana: Number(chave),
+            hora_inicio: periodo.inicio,
+            hora_fim: periodo.fim,
+          });
+        }
+      }
+
+      if (novasLinhas.length > 0) {
+        await HorarioExpediente.bulkCreate(novasLinhas);
+      }
+    }
 
     solicitacao.status = "aprovada";
     solicitacao.decidido_em = new Date();

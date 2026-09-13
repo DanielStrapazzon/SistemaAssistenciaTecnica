@@ -11,6 +11,7 @@ import HorarioExpedienteController from "./controllers/HorarioExpedienteControll
 
 import { exigirLogin } from "./middleware/exigirLogin.js";
 import { exigirAdmin } from "./middleware/exigirAdmin.js";
+import { exigirSuperAdmin } from "./middleware/exigirSuperAdmin.js";
 import { limitarTentativasLogin } from "./middleware/limitarTentativasLogin.js";
 import { criarLimitador } from "./middleware/criarLimitador.js";
 
@@ -48,12 +49,12 @@ api.post('/api/redefinir-senha', limitarEsqueciSenha, AuthController.redefinirSe
 
 api.post('/api/solicitacao-acesso', limitarSolicitacaoAcesso, SolicitacaoAcessoController.criar);
 
-api.use('/api/solicitacao-acesso', exigirLogin, exigirAdmin);
+api.use('/api/solicitacao-acesso', exigirLogin, exigirSuperAdmin);
 api.get('/api/solicitacao-acesso', SolicitacaoAcessoController.listar);
 api.post('/api/solicitacao-acesso/:id/aprovar', SolicitacaoAcessoController.aprovar);
 api.post('/api/solicitacao-acesso/:id/rejeitar', SolicitacaoAcessoController.rejeitar);
 
-api.get('/api/empresa', exigirLogin, exigirAdmin, EmpresaController.listar);
+api.get('/api/empresa', exigirLogin, exigirSuperAdmin, EmpresaController.listar);
 
 api.get('/api/horario-expediente', exigirLogin, HorarioExpedienteController.listar);
 api.put('/api/horario-expediente', exigirLogin, exigirAdmin, HorarioExpedienteController.salvar);

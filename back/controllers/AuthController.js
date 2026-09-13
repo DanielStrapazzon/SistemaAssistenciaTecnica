@@ -52,6 +52,7 @@ async function login(req, res) {
         nome: usuario.nome,
         email: usuario.email,
         perfil: usuario.perfil,
+        super_admin: usuario.super_admin,
       },
       process.env.JWT_SECRET,
       { expiresIn: "8h" }
@@ -65,6 +66,7 @@ async function login(req, res) {
       nome: usuario.nome,
       email: usuario.email,
       perfil: usuario.perfil,
+      super_admin: usuario.super_admin,
     });
   } catch (error) {
     console.error("ERRO LOGIN:", error);

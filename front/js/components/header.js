@@ -70,9 +70,9 @@ function renderAppHeader() {
       nomeEl.textContent = event.detail.nome;
     }
 
-    if (event.detail?.perfil === 1) {
-      const menuLista = document.querySelector(".app-navbar .nav-pills");
+    const menuLista = document.querySelector(".app-navbar .nav-pills");
 
+    if (event.detail?.super_admin === true) {
       if (menuLista && !menuLista.querySelector("[data-menu='admin']")) {
         const item = document.createElement("li");
         item.className = "nav-item";
@@ -83,7 +83,9 @@ function renderAppHeader() {
         `;
         menuLista.appendChild(item);
       }
+    }
 
+    if (event.detail?.perfil === 1) {
       if (menuLista && !menuLista.querySelector("[data-menu='expediente']")) {
         const item = document.createElement("li");
         item.className = "nav-item";
