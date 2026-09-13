@@ -227,3 +227,68 @@ body {
 .login-sucesso-box.show {
   display: block;
 }
+
+.tech-orbit {
+  position: absolute;
+  right: -70px;
+  bottom: -70px;
+  width: 380px;
+  height: 380px;
+  opacity: 0.9;
+  pointer-events: none;
+  z-index: 0;
+}
+.tech-orbit svg { width: 100%; height: 100%; overflow: visible; }
+
+.ring circle { fill: none; stroke: #ffffff; }
+.ring-outer circle {
+  stroke-width: 1; stroke-dasharray: 2 10; opacity: .25;
+  transform-box: fill-box; transform-origin: center;
+  animation: girar 70s linear infinite;
+}
+.ring-mid circle {
+  stroke-width: 1; stroke-dasharray: 1 6; opacity: .35;
+  transform-box: fill-box; transform-origin: center;
+  animation: girar-reverso 45s linear infinite;
+}
+.ring-inner { fill: none; stroke: #ffffff; stroke-width: 1; opacity: .3; }
+
+@keyframes girar { to { transform: rotate(360deg); } }
+@keyframes girar-reverso { to { transform: rotate(-360deg); } }
+
+.signal-line {
+  stroke: #6ea1ff;
+  stroke-width: 1.5;
+  stroke-dasharray: 6 10;
+  opacity: .5;
+  animation: fluxo 2.4s linear infinite;
+}
+@keyframes fluxo { to { stroke-dashoffset: -160; } }
+
+.node {
+  fill: #6ea1ff;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pulsar 2.4s ease-in-out infinite;
+}
+@keyframes pulsar {
+  0%, 100% { transform: scale(1); opacity: .6; }
+  50% { transform: scale(1.8); opacity: 1; }
+}
+
+.core-glow {
+  fill: rgba(110,161,255,0.18);
+  animation: respirar 3.6s ease-in-out infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+@keyframes respirar {
+  0%, 100% { transform: scale(1); opacity: .5; }
+  50% { transform: scale(1.15); opacity: .9; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ring-outer circle, .ring-mid circle, .signal-line, .node, .core-glow {
+    animation: none;
+  }
+}
